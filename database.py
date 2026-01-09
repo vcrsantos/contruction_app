@@ -10,6 +10,13 @@ def init_db():
     """Initializes the database with the required tables."""
     conn = get_connection()
     cursor = conn.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS casas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL
+        )
+    ''')
     
     # Create tables
     cursor.execute('''
@@ -17,7 +24,9 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             valor REAL NOT NULL,
             categoria TEXT NOT NULL,
-            data TEXT NOT NULL
+            data TEXT NOT NULL,
+            casa_id INTEGER NOT NULL,
+            FOREIGN KEY (casa_id) REFERENCES casas(id)
         )
     ''')
     
