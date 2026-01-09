@@ -1,6 +1,6 @@
 import sqlite3
 
-DB_NAME = "construcao.db"
+DB_NAME = "construction.db"
 
 def get_connection():
     """Establishes and returns a connection to the SQLite database."""
@@ -12,21 +12,21 @@ def init_db():
     cursor = conn.cursor()
 
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS casas (
+        CREATE TABLE IF NOT EXISTS houses (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT NOT NULL
+            name TEXT NOT NULL
         )
     ''')
     
     # Create tables
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS gastos (
+        CREATE TABLE IF NOT EXISTS expenses (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            valor REAL NOT NULL,
-            categoria TEXT NOT NULL,
-            data TEXT NOT NULL,
-            casa_id INTEGER NOT NULL,
-            FOREIGN KEY (casa_id) REFERENCES casas(id)
+            value REAL NOT NULL,
+            category TEXT NOT NULL,
+            date TEXT NOT NULL,
+            house_id INTEGER NOT NULL,
+            FOREIGN KEY (house_id) REFERENCES houses(id)
         )
     ''')
     

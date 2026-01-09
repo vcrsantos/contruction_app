@@ -18,53 +18,53 @@ def home():
     if request.method == "POST":
         cursor.execute(
             """
-            INSERT INTO gastos (valor, categoria, data, casa_id)
+            INSERT INTO expenses (value, category, date, house_id)
             VALUES (?, ?, ?, ?)
             """,
             (
-                request.form["valor"],
-                request.form["categoria"],
-                request.form["data"] or str(date.today()),
-                request.form["casa_id"]
+                request.form["value"],
+                request.form["category"],
+                request.form["date"] or str(date.today()),
+                request.form["house_id"]
             )
         )
         conn.commit()
         conn.close()
-        return redirect(url_for("home", sucesso=1))
+        return redirect(url_for("home", success=1))
     
-    # Fetch casas and gastos for display
-    casas = cursor.execute("SELECT id, nome FROM casas").fetchall()
+    # Fetch houses and expenses for display
+    houses = cursor.execute("SELECT id, name FROM houses").fetchall()
 
-    # Fetch gastos with associated casa names
-    gastos = cursor.execute("""
-        SELECT g.id, g.valor, g.categoria, g.data, c.nome
-        FROM gastos g
-        JOIN casas c ON g.casa_id = c.id
-        ORDER BY g.data DESC
+    # Fetch expenses with associated house names
+    expenses = cursor.execute("""
+        SELECT g.id, g.value, g.category, g.date, c.name
+        FROM expenses g
+        JOIN houses c ON g.house_id = c.id
+        ORDER BY g.date DESC
     """).fetchall()
 
     conn.close()
 
     return render_template(
         "index.html",
-        casas=casas, 
-        gastos=gastos,
+        houses=houses, 
+        expenses=expenses,
         hoje=str(date.today()),
         sucesso=request.args.get("sucesso")
     )
 
-# Route to add a new casa
-@app.route("/nova_casa", methods=["POST"])
-def nova_casa():
-    nome = request.form["nome"]
+# Route to add a new house
+@app.route("/new_house", methods=["POST"])
+def new_house():
+    name = request.form["name"]
     conn = database.get_connection()
     cursor = conn.cursor()
 
 
-    # Insert new casa into the database
+    # Insert new house into the database
     cursor.execute(
-        "INSERT INTO casas (nome) VALUES (?)",
-        (nome,)
+        "INSERT INTO houses (name) VALUES (?)",
+        (name,)
     )
 
     conn.commit()
@@ -74,4 +74,4 @@ def nova_casa():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

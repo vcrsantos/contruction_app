@@ -22,13 +22,13 @@
 
   <body>
 
-    {% if sucesso %}
+    {% if success %}
       <div class="success">Cadastro realizado com sucesso!</div>
     {% endif %}
 
     <h2>Nova Casa</h2>
-      <form method="post" action="/nova_casa">
-        <input type="text" name="nome" placeholder="Nome da Casa" required>
+      <form method="post" action="/new_house">
+        <input type="text" name="name" placeholder="Nome da Casa" required>
         <button type="submit">Cadastrar</button>
       </form>
 
@@ -36,16 +36,16 @@
     
     <h2>Novo Gastos</h2>
     <form method="post">
-      <input type="number" step="0.01" name="valor" placeholder="Valor" required>
+      <input type="number" step="0.01" name="value" placeholder="Valor" required>
 
-      <select name="categoria" required>
+      <select name="category" required>
         <!-- <option value="" disabled selected>Categoria</option> -->
         <option>Material</option>
         <option>Pedreiro</option>
         <option>IPTU</option>
         <option>Escritório</option>
         <option>Terreno</option>
-        <option>Cartorio</option>
+        <option>Cartório</option>
         <option>Desmembramento</option>
         <option>Limpeza do terreno</option>
         <option>Engenheiro</option>
@@ -55,11 +55,11 @@
         <option>Consumo Luz</option>
       </select>
 
-      <input type="date" name="data" value="{{ hoje }}">
+      <input type="date" name="date" value="{{ hoje }}">
 
-      <select name="casa_id" required>
-        {% for casa in casas %}
-          <option value="{{ casa[0] }}">{{ casa[1] }}</option>
+      <select name="house_id" required>
+        {% for house in houses %}
+          <option value="{{ house[0] }}">{{ house[1] }}</option>
         {% endfor %}
       </select>
 
@@ -70,16 +70,22 @@
 
     <h3>Gastos Cadastrados</h3>
 
-    <ul>
-      {% for gasto in gastos %}
-        <li>
-          {{ gasto[2] }} —
-          R$ {{ gasto[1] }} —
-          {{ gasto[3] }} —
-          {{ gasto[4] }}
-        </li>
+    <table border="1" cellpadding="5" cellspacing="0">
+      <tr>
+        <th>Categoria</th>
+        <th>Valor</th>
+        <th>Data</th>
+        <th>Casa</th>
+      </tr>
+      {% for expense in expenses %}
+        <tr>
+          <td>{{ expense[2] }}</td>
+          <td>R$ {{ expense[1] }}</td>
+          <td>{{ expense[3] }}</td>
+          <td>{{ expense[4] }}</td>
+        </tr>
       {% endfor %}
-    </ul>
+    </table>
   
   </body>
 </html>
