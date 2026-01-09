@@ -1,9 +1,52 @@
 <!DOCTYPE html>
 <html>
-<body>
-  <form method="post">
-  <input name="valor" placeholder="Valor do gasto">
-  <button type="submit">Salvar</button>
-</form>
-</body>
+
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+
+  <body>
+
+    <h2>Novo Gastos</h2>
+
+    <form method="post">
+      <input type="number" step="0.01" name="valor" placeholder="Valor" required>
+
+      <select name="categoria" required>
+        <!-- <option value="" disabled selected>Categoria</option> -->
+        <option>Material</option>
+        <option>Pedreiro</option>
+        <option>IPTU</option>
+        <option>Escritório</option>
+        <option>Terreno</option>
+        <option>Cartorio</option>
+        <option>Desmembramento</option>
+        <option>Limpeza do terreno</option>
+        <option>Engenheiro</option>
+        <option>Container</option>
+        <option>Poste</option>
+        <option>Consumo Água</option>
+        <option>Consumo Luz</option>
+      </select>
+
+      <input type="date" name="data" required>
+
+      <button type="submit">Salvar</button>
+    </form>
+
+    <hr>
+
+    <h2>Gastos Cadastrados</h2>
+
+    <ul>
+      {% for gasto in gastos %}
+        <li>
+          {{ gasto[1] }} —
+          R$ {{ gasto[0] }} —
+          {{ gasto[2] }}
+        </li>
+      {% endfor %}
+    </ul>
+  
+  </body>
 </html>
