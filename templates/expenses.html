@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Gastos Cadastrados</h2>
+
+<ul>
+  {% for g in expenses %}
+    <li>
+      R$ {{ g[1] }} — {{ g[2] }} — {{ g[4] }}
+      <a href="/edit-expense/{{ g[0] }}">✏️</a>
+      <a href="/remove-expense/{{ g[0] }}">❌</a>
+    </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

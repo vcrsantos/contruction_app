@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Nova Casa</h2>
+
+<form method="post" action="/new-house">
+  <input name="name" placeholder="Nome da casa" required>
+  <button>Salvar</button>
+</form>
+
+<hr>
+
+<h2>Casas</h2>
+
+<ul>
+  {% for house in houses %}
+    <li>
+      {{ house[1] }}
+      <a href="/remove-house/{{ house[0] }}">❌</a>
+    </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

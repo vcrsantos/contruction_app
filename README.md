@@ -1,22 +1,28 @@
-# Construction
+# Construction Expense Manager
 
 A simple web application built with Flask to record and manage construction expenses.
 
 ## 📋 Description
 
-This project is a web application that allows users to record expense values in construction projects through an interactive form.
+This project is a web application that allows users to record and manage expense values in construction projects through an interactive, user-friendly interface. It supports multiple properties, expense categorization, and complete CRUD operations.
 
 ## 🚀 Features
 
-- Simple and intuitive web interface
-- Expense value recording
-- Data processing via POST form
+- ✅ Multiple houses/properties management
+- ✅ Complete expense CRUD operations
+- ✅ Expense categorization (Material, Pedreiro, IPTU, Engineer, etc.)
+- ✅ Expense association with properties
+- ✅ Automatic date assignment (customizable)
+- ✅ Responsive web interface
+- ✅ Data persistence with SQLite
 
 ## 🛠️ Technologies Used
 
-- **Python** - Programming language
+- **Python 3.7+** - Programming language
 - **Flask** - Web framework
-- **HTML** - Interface markup
+- **SQLite** - Local database
+- **Jinja2** - Template engine
+- **HTML5/CSS3** - Interface
 
 ## 📦 Requirements
 
@@ -60,28 +66,51 @@ http://localhost:5000
 
 ## 📝 Usage
 
-1. Open your browser and go to `http://localhost:5000`
-2. Enter the expense value in the "Valor do gasto" field
-3. Click "Salvar"
-4. The value will be processed and displayed on the screen
+1. **Create House**: Go to "Houses" → fill "House name" → "Save"
+2. **Record Expense**: Click "New Expense" → fill the form → "Save Expense"
+   - Value (R$)
+   - Category (Material, Pedreiro, IPTU, etc.)
+   - Date (default: today)
+   - Associated house
+3. **View Expenses**: Access "Expenses" to see the complete list
+4. **Edit**: Click the ✏️ next to the expense
+5. **Remove**: Click the ❌ to delete
 
 ## 📂 Project Structure
 
 ```
 construcao/
-├── app.py              # Main Flask application
+├── app.py                    # Main Flask application
+├── database.py               # Database configuration and initialization
 ├── templates/
-│   └── index.html      # Main page HTML template
-└── README.md           # This file
+│   ├── base.html            # Base template with navigation
+│   ├── new-expense.html     # New expense form
+│   ├── edit-expense.html    # Edit expense form
+│   ├── expenses.html        # Expenses listing
+│   ├── houses.html          # Houses management
+│   ├── remove-house.html    # Remove house confirmation
+│   └── index.html           # Legacy template
+├── construction.db          # SQLite database
+├── venv/                    # Virtual environment
+└── README.md                # This file
 ```
 
-## 🔄 Future Improvements
+## 🗂️ Database
 
-- Data persistence with database
-- Input validation
-- Improved UI with CSS
-- Historical expenses listing
-- User authentication
+**`houses` table:**
+- `id` - Primary key
+- `name` - House name
+
+**`expenses` table:**
+- `id` - Primary key
+- `value` - Expense value (R$)
+- `category` - Expense category
+- `date` - Expense date
+- `house_id` - Foreign key to houses
+
+## 📊 Expense Categories
+
+Material, Pedreiro, IPTU, Escritório, Terreno, Cartório, Desmembramento, Limpeza do terreno, Engenheiro, Container, Poste, Consumo Água, Consumo Luz
 
 ## 📄 License
 
@@ -89,8 +118,4 @@ This project is free to use.
 
 ## 👨‍💻 Author
 
-Victor
-
----
-
-**Last updated:** January 2026
+Victor Santos
