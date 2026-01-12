@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Nova Categoria</h2>
+
+<form method="post" action="/new-category">
+    <input name="name" type="text" placeholder="Nome da categoria" required autofocus>
+    <button type="submit">Salvar Categoria</button>
+</form>
+
+<hr>
+
+<h2>Categorias</h2>
+
+<table border="1" cellpadding="5" cellspacing="0" style="width: 100%;">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in categories %}
+      <tr>
+        <td>{{ c[1] }}</td>
+        <td>
+          <a href="/edit-category/{{ c[0] }}">✏️</a>
+          <a href="/remove-category/{{ c[0] }}">❌</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

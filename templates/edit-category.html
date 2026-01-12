@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Editar Categoria</h2>
+
+<form method="post">
+    <input name="name" type="text" placeholder="Nome da categoria" value="{{ category[1] }}" required autofocus>
+    <button type="submit">Salvar Categoria</button>
+</form>
+
+{% endblock %}

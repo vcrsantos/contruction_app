@@ -18,27 +18,12 @@
 
   <!-- Categoria -->
   <label>Categoria</label>
-  <select name="category" required>
-    {% set categories = [
-      "Material",
-        "Pedreiro",
-        "IPTU",
-        "Escritório",
-        "Terreno",
-        "Cartório",
-        "Desmembramento",
-        "Limpeza do terreno",
-        "Engenheiro",
-        "Container",
-        "Poste",
-        "Consumo Água",
-        "Consumo Luz"
-    ] %}
-    {% for cat in categories %}
-      <option value="{{ cat }}"
-        {% if expense[2] == cat %}selected{% endif %}
+  <select name="category_id" required>
+    {% for c in categories %}
+      <option value="{{ c[0] }}"
+        {% if expense[2] == c[0] %}selected{% endif %}
       >
-        {{ cat }}
+        {{ c[1] }}
       </option>
     {% endfor %}
   </select>

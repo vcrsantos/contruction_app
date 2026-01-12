@@ -5,6 +5,8 @@
 
 <form method="post" action="/new-house">
   <input name="name" placeholder="Nome da casa" required>
+  <input type="number" step="0.01" name="selling_price" placeholder="Preço de venda">
+  <textarea name="observations" rows="3" placeholder="Observações"></textarea>
   <button>Salvar</button>
 </form>
 
@@ -12,13 +14,30 @@
 
 <h2>Casas</h2>
 
-<ul>
-  {% for house in houses %}
-    <li>
-      {{ house[1] }}
-      <a href="/remove-house/{{ house[0] }}">❌</a>
-    </li>
-  {% endfor %}
-</ul>
+<table border="1" cellpadding="5" cellspacing="0" style="width: 100%;">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Preço de Venda</th>
+      <th>Total Gasto</th>
+      <th>Observações</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for house in houses %}
+      <tr>
+        <td>{{ house[1] }}</td>
+        <td>{{ 'R$ %.2f'|format(house[2]) if house[2] else '-' }}</td>
+        <td>{{ 'R$ %.2f'|format(house[4]) }}</td>
+        <td>{{ house[3][:50] if house[3] else '-' }}</td>
+        <td>
+          <a href="/edit-house/{{ house[0] }}">✏️</a>
+          <a href="/remove-house/{{ house[0] }}">❌</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
 {% endblock %}
