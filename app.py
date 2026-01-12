@@ -276,4 +276,4 @@ def edit_category(category_id):
     return render_template("edit-category.html", category=category)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
