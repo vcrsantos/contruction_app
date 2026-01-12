@@ -4,31 +4,28 @@
 <h2>Editar Gasto</h2>
 
 <form method="post">
-
-  <!-- Valor -->
   <label>Valor</label>
   <input
     type="number"
     step="0.01"
     name="value"
     value="{{ expense[1] }}"
+    placeholder="Ex: 250.00"
     required
     autofocus
   >
 
-  <!-- Categoria -->
   <label>Categoria</label>
   <select name="category_id" required>
     {% for c in categories %}
       <option value="{{ c[0] }}"
-        {% if expense[2] == c[0] %}selected{% endif %}
+        {% if expense[2] == c[1] %}selected{% endif %}
       >
         {{ c[1] }}
       </option>
     {% endfor %}
   </select>
 
-  <!-- Data -->
   <label>Data</label>
   <input
     type="date"
@@ -37,7 +34,6 @@
     required
   >
 
-  <!-- Casa -->
   <label>Casa</label>
   <select name="house_id" required>
     {% for house in houses %}
@@ -49,10 +45,13 @@
     {% endfor %}
   </select>
 
-  <!-- Ações -->
-  <button type="submit">Salvar Alterações</button>
-  <a href="/expenses">Cancelar</a>
+  <label>Observações</label>
+  <textarea name="observations" rows="4" placeholder="Detalhes adicionais">{{ expense[5] if expense[5] else '' }}</textarea>
 
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+    <button type="submit">💾 Salvar Alterações</button>
+    <a href="/expenses" class="btn" style="background-color: #6b7280; text-decoration: none; text-align: center;">❌ Cancelar</a>
+  </div>
 </form>
 
 {% endblock %}

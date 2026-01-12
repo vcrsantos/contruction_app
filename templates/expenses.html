@@ -4,8 +4,6 @@
 <h2>Novo Gasto</h2>
 
 <form method="post">
-
-  <!-- Valor -->
   <label>Valor</label>
   <input
     type="number"
@@ -16,15 +14,14 @@
     autofocus
   >
 
-  <!-- Categoria -->
   <label>Categoria</label>
   <select name="category_id" required>
+    <option value="">-- Selecione --</option>
     {% for c in categories %}
       <option value="{{ c[0] }}">{{ c[1] }}</option>
     {% endfor %}
   </select>
 
-  <!-- Data -->
   <label>Data</label>
   <input
     type="date"
@@ -33,16 +30,14 @@
     required
   >
 
-  <!-- Casa -->
   <label>Casa</label>
   <select name="house_id" required>
-    <option value="">Selecione a casa</option>
+    <option value="">-- Selecione a casa --</option>
     {% for house in houses %}
       <option value="{{ house[0] }}">{{ house[1] }}</option>
     {% endfor %}
   </select>
 
-  <!-- Observações -->
   <label>Observações</label>
   <textarea
     name="observations"
@@ -50,16 +45,12 @@
     rows="4"
   ></textarea>
 
-  <!-- Botão -->
-  <button type="submit">Salvar Gasto</button>
-
+  <button type="submit">💾 Salvar Gasto</button>
 </form>
-
-<hr>
 
 <h2>Gastos Cadastrados</h2>
 
-<table border="1" cellpadding="5" cellspacing="0" style="width: 100%;">
+<table>
   <thead>
     <tr>
       <th>Valor</th>
@@ -73,14 +64,14 @@
   <tbody>
     {% for g in expenses %}
       <tr>
-        <td>R$ {{ '%.2f'|format(g[1]) }}</td>
+        <td><strong>R$ {{ '%.2f'|format(g[1]) }}</strong></td>
         <td>{{ g[2] }}</td>
         <td>{{ g[4] }}</td>
         <td>{{ g[3] }}</td>
         <td>{{ g[5][:50] if g[5] else '-' }}</td>
         <td>
           <a href="/edit-expense/{{ g[0] }}">✏️</a>
-          <a href="/remove-expense/{{ g[0] }}">❌</a>
+          <a href="/remove-expense/{{ g[0] }}">🗑️</a>
         </td>
       </tr>
     {% endfor %}

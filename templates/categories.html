@@ -4,15 +4,14 @@
 <h2>Nova Categoria</h2>
 
 <form method="post" action="/new-category">
-    <input name="name" type="text" placeholder="Nome da categoria" required autofocus>
-    <button type="submit">Salvar Categoria</button>
+    <label>Nome da Categoria</label>
+    <input name="name" type="text" placeholder="Ex: Material de Construção" required autofocus>
+    <button type="submit">💾 Salvar Categoria</button>
 </form>
 
-<hr>
+<h2>Categorias Cadastradas</h2>
 
-<h2>Categorias</h2>
-
-<table border="1" cellpadding="5" cellspacing="0" style="width: 100%;">
+<table>
   <thead>
     <tr>
       <th>Nome</th>
@@ -22,10 +21,10 @@
   <tbody>
     {% for c in categories %}
       <tr>
-        <td>{{ c[1] }}</td>
+        <td><strong>{{ c[1] }}</strong></td>
         <td>
           <a href="/edit-category/{{ c[0] }}">✏️</a>
-          <a href="/remove-category/{{ c[0] }}">❌</a>
+          <a href="/remove-category/{{ c[0] }}">🗑️</a>
         </td>
       </tr>
     {% endfor %}

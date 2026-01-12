@@ -4,8 +4,13 @@
 <h2>Editar Categoria</h2>
 
 <form method="post">
-    <input name="name" type="text" placeholder="Nome da categoria" value="{{ category[1] }}" required autofocus>
-    <button type="submit">Salvar Categoria</button>
+    <label>Nome da Categoria</label>
+    <input name="name" type="text" placeholder="Ex: Material de Construção" value="{{ category[1] }}" required autofocus>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+      <button type="submit">💾 Salvar Alterações</button>
+      <a href="/categories" class="btn" style="background-color: #6b7280; text-decoration: none; text-align: center;">❌ Cancelar</a>
+    </div>
 </form>
 
 {% endblock %}

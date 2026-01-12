@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Controle de Construção</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6366f1">
+  <title>Construção - Gerenciador de Despesas</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <nav>
-  <a href="/houses">Casas</a> |
-  <a href="/expenses">Gastos</a> |
-  <a href="/categories">Categorias</a>
+  <a href="/houses">🏠 Casas</a>
+  <a href="/expenses">💰 Gastos</a>
+  <a href="/categories">📂 Categorias</a>
 </nav>
 
-<hr>
-
-{% block content %}{% endblock %}
+<div class="container">
+  {% block content %}{% endblock %}
+</div>
 
 </body>
 </html>
