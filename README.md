@@ -1,121 +1,87 @@
 # Construction Expense Manager
 
-A simple web application built with Flask to record and manage construction expenses.
+Aplicação web com Flask para registrar e gerenciar gastos de obras de construção.
 
-## 📋 Description
+## 🚀 Funcionalidades
 
-This project is a web application that allows users to record and manage expense values in construction projects through an interactive, user-friendly interface. It supports multiple properties, expense categorization, and complete CRUD operations.
+- Gerenciamento de múltiplas casas/propriedades (nome, preço de venda, observações)
+- CRUD completo de gastos com categorias e observações
+- Categorias customizáveis com seed padrão
+- Filtros de gastos por casa, categoria e período
+- Formatação de valores em R$ (padrão brasileiro)
+- Mensagens de feedback com animação fade-out
+- Validação de dados no backend
+- Confirmação antes de exclusões
+- Interface responsiva com dark mode automático
+- Persistência com SQLite
 
-## 🚀 Features
-
-- ✅ Multiple houses/properties management
-- ✅ Complete expense CRUD operations
-- ✅ Expense categorization (Material, Pedreiro, IPTU, Engineer, etc.)
-- ✅ Expense association with properties
-- ✅ Automatic date assignment (customizable)
-- ✅ Responsive web interface
-- ✅ Data persistence with SQLite
-
-## 🛠️ Technologies Used
-
-- **Python 3.7+** - Programming language
-- **Flask** - Web framework
-- **SQLite** - Local database
-- **Jinja2** - Template engine
-- **HTML5/CSS3** - Interface
-
-## 📦 Requirements
+## 🛠️ Tecnologias
 
 - Python 3.7+
 - Flask
+- SQLite
+- Jinja2
+- HTML5/CSS3
 
-## 💻 Installation
+## 💻 Instalação
 
-1. Clone or access the repository:
 ```bash
-cd construcao
+git clone git@github.com:vcrsantos/contruction_app.git
+cd contruction_app
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-2. Create a virtual environment (recommended):
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+## ▶️ Como Rodar
 
-3. Install dependencies:
 ```bash
-pip install flask
-```
-
-## ▶️ How to Run
-
-1. Activate the virtual environment (if not already activated):
-```bash
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-2. Run the application:
-```bash
+source venv/bin/activate
 python app.py
 ```
 
-3. Access in your browser:
-```
-http://localhost:5000
-```
+Acesse: http://localhost:5000
 
-## 📝 Usage
-
-1. **Create House**: Go to "Houses" → fill "House name" → "Save"
-2. **Record Expense**: Click "New Expense" → fill the form → "Save Expense"
-   - Value (R$)
-   - Category (Material, Pedreiro, IPTU, etc.)
-   - Date (default: today)
-   - Associated house
-3. **View Expenses**: Access "Expenses" to see the complete list
-4. **Edit**: Click the ✏️ next to the expense
-5. **Remove**: Click the ❌ to delete
-
-## 📂 Project Structure
+## 📂 Estrutura
 
 ```
-construcao/
-├── app.py                    # Main Flask application
-├── database.py               # Database configuration and initialization
+contruction_app/
+├── app.py              # Aplicação Flask e rotas
+├── database.py         # Configuração e inicialização do banco
+├── backup.py           # Backup do banco de dados
+├── wsgi.py             # Entry point para deploy (PythonAnywhere)
+├── requirements.txt    # Dependências
 ├── templates/
-│   ├── base.html            # Base template with navigation
-│   ├── new-expense.html     # New expense form
-│   ├── edit-expense.html    # Edit expense form
-│   ├── expenses.html        # Expenses listing
-│   ├── houses.html          # Houses management
-│   ├── remove-house.html    # Remove house confirmation
-│   └── index.html           # Legacy template
-├── construction.db          # SQLite database
-├── venv/                    # Virtual environment
-└── README.md                # This file
+│   ├── base.html           # Template base com navegação
+│   ├── expenses.html       # Listagem e cadastro de gastos
+│   ├── edit-expense.html   # Edição de gasto
+│   ├── houses.html         # Listagem e cadastro de casas
+│   ├── edit-house.html     # Edição de casa
+│   ├── categories.html     # Listagem e cadastro de categorias
+│   └── edit-category.html  # Edição de categoria
+└── static/
+    └── style.css           # Estilos com dark mode
 ```
 
-## 🗂️ Database
+## 🗂️ Banco de Dados
 
-**`houses` table:**
-- `id` - Primary key
-- `name` - House name
+**houses**: id, name, selling_price, observations
 
-**`expenses` table:**
-- `id` - Primary key
-- `value` - Expense value (R$)
-- `category` - Expense category
-- `date` - Expense date
-- `house_id` - Foreign key to houses
+**categories**: id, name (unique)
 
-## 📊 Expense Categories
+**expenses**: id, value, category, date, observations, house_id (FK → houses)
 
-Material, Pedreiro, IPTU, Escritório, Terreno, Cartório, Desmembramento, Limpeza do terreno, Engenheiro, Container, Poste, Consumo Água, Consumo Luz
+## 📊 Categorias Padrão
 
-## 📄 License
+Aquisição e Regularização, Preparação do Terreno, Mão de Obra, Materiais de Construção, Projetos e Técnicos, Infraestrutura da Obra, Custos Administrativos
 
-This project is free to use.
+## 🌐 Deploy (PythonAnywhere)
 
-## 👨‍💻 Author
+1. Clone o repo no PythonAnywhere: `git clone ...`
+2. Configure o Web App apontando o WSGI para `wsgi.py`
+3. Adicione static files: URL `/static/` → diretório `static/`
+4. Reload
+
+## 👨‍💻 Autor
 
 Victor Santos
