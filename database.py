@@ -29,7 +29,9 @@ def seed_categories():
 
 def get_connection():
     """Establishes and returns a connection to the SQLite database."""
-    return sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_NAME)
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
 
 def init_db():
     """Initializes the database with the required tables."""
