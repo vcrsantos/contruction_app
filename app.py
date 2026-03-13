@@ -22,7 +22,17 @@ def expenses():
         cursor = conn.cursor()
 
         if request.method == "POST":
-            category_id = request.form["category_id"]
+            value = request.form.get("value", "").strip()
+            category_id = request.form.get("category_id", "").strip()
+            house_id = request.form.get("house_id", "").strip()
+
+            if not value or float(value) <= 0:
+                flash("Valor deve ser maior que zero.", "error")
+                return redirect("/expenses")
+            if not category_id or not house_id:
+                flash("Categoria e casa são obrigatórios.", "error")
+                return redirect("/expenses")
+
             category_name = cursor.execute(
                 "SELECT name FROM categories WHERE id = ?", (category_id,)
             ).fetchone()[0]
@@ -62,7 +72,17 @@ def edit_expense(expense_id):
         cursor = conn.cursor()
 
         if request.method == "POST":
-            category_id = request.form["category_id"]
+            value = request.form.get("value", "").strip()
+            category_id = request.form.get("category_id", "").strip()
+            house_id = request.form.get("house_id", "").strip()
+
+            if not value or float(value) <= 0:
+                flash("Valor deve ser maior que zero.", "error")
+                return redirect(f"/edit-expense/{expense_id}")
+            if not category_id or not house_id:
+                flash("Categoria e casa são obrigatórios.", "error")
+                return redirect(f"/edit-expense/{expense_id}")
+
             category_name = cursor.execute(
                 "SELECT name FROM categories WHERE id = ?", (category_id,)
             ).fetchone()[0]
@@ -122,6 +142,11 @@ def houses():
 
 @app.route("/new-house", methods=["POST"])
 def new_house():
+    name = request.form.get("name", "").strip()
+    if not name:
+        flash("Nome da casa é obrigatório.", "error")
+        return redirect("/houses")
+
     conn = database.get_connection()
     try:
         conn.execute(
@@ -140,6 +165,11 @@ def edit_house(house_id):
     conn = database.get_connection()
     try:
         if request.method == "POST":
+            name = request.form.get("name", "").strip()
+            if not name:
+                flash("Nome da casa é obrigatório.", "error")
+                return redirect(f"/edit-house/{house_id}")
+
             conn.execute(
                 "UPDATE houses SET name = ?, selling_price = ?, observations = ? WHERE id = ?",
                 (request.form["name"], request.form.get("selling_price"), request.form.get("observations"), house_id),
@@ -183,6 +213,11 @@ def categories():
 
 @app.route("/new-category", methods=["POST"])
 def new_category():
+    name = request.form.get("name", "").strip()
+    if not name:
+        flash("Nome da categoria é obrigatório.", "error")
+        return redirect("/categories")
+
     conn = database.get_connection()
     try:
         conn.execute("INSERT INTO categories (name) VALUES (?)", (request.form["name"],))
@@ -219,7 +254,12 @@ def edit_category(category_id):
     conn = database.get_connection()
     try:
         if request.method == "POST":
-            conn.execute("UPDATE categories SET name = ? WHERE id = ?", (request.form["name"], category_id))
+            name = request.form.get("name", "").strip()
+            if not name:
+                flash("Nome da categoria é obrigatório.", "error")
+                return redirect(f"/edit-category/{category_id}")
+
+            conn.execute("UPDATE categories SET name = ? WHERE id = ?", (name, category_id))
             conn.commit()
             flash("Categoria atualizada!", "success")
             return redirect("/categories")
