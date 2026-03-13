@@ -9,6 +9,6 @@ def backup_db():
     os.makedirs(BACKUP_DIR, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    backup_file = f"{BACKUP_DIR}/contruction_{timestamp}.db"
+    backup_file = f"{BACKUP_DIR}/construction_{timestamp}.db"
 
     shutil.copy(DB_PATH, backup_file)

@@ -1,21 +1,21 @@
 # Construction Expense Manager
 
-Aplicação web com Flask para registrar e gerenciar gastos de obras de construção.
+Web application built with Flask to track and manage construction project expenses.
 
-## 🚀 Funcionalidades
+## 🚀 Features
 
-- Gerenciamento de múltiplas casas/propriedades (nome, preço de venda, observações)
-- CRUD completo de gastos com categorias e observações
-- Categorias customizáveis com seed padrão
-- Filtros de gastos por casa, categoria e período
-- Formatação de valores em R$ (padrão brasileiro)
-- Mensagens de feedback com animação fade-out
-- Validação de dados no backend
-- Confirmação antes de exclusões
-- Interface responsiva com dark mode automático
-- Persistência com SQLite
+- Manage multiple houses/properties (name, selling price, notes)
+- Full CRUD for expenses with categories and notes
+- Customizable categories with default seed data
+- Expense filters by house, category and date range
+- Brazilian currency formatting (R$)
+- Flash feedback messages with fade-out animation
+- Backend data validation
+- Deletion confirmation dialogs
+- Responsive UI with automatic dark mode
+- SQLite persistence
 
-## 🛠️ Tecnologias
+## 🛠️ Tech Stack
 
 - Python 3.7+
 - Flask
@@ -23,7 +23,7 @@ Aplicação web com Flask para registrar e gerenciar gastos de obras de constru�
 - Jinja2
 - HTML5/CSS3
 
-## 💻 Instalação
+## 💻 Installation
 
 ```bash
 git clone git@github.com:vcrsantos/contruction_app.git
@@ -33,37 +33,37 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## ▶️ Como Rodar
+## ▶️ Running
 
 ```bash
 source venv/bin/activate
 python app.py
 ```
 
-Acesse: http://localhost:5000
+Open: http://localhost:5000
 
-## 📂 Estrutura
+## 📂 Structure
 
 ```
 contruction_app/
-├── app.py              # Aplicação Flask e rotas
-├── database.py         # Configuração e inicialização do banco
-├── backup.py           # Backup do banco de dados
-├── wsgi.py             # Entry point para deploy (PythonAnywhere)
-├── requirements.txt    # Dependências
+├── app.py              # Flask application and routes
+├── database.py         # Database setup and initialization
+├── backup.py           # Database backup utility
+├── wsgi.py             # WSGI entry point for deployment (PythonAnywhere)
+├── requirements.txt    # Dependencies
 ├── templates/
-│   ├── base.html           # Template base com navegação
-│   ├── expenses.html       # Listagem e cadastro de gastos
-│   ├── edit-expense.html   # Edição de gasto
-│   ├── houses.html         # Listagem e cadastro de casas
-│   ├── edit-house.html     # Edição de casa
-│   ├── categories.html     # Listagem e cadastro de categorias
-│   └── edit-category.html  # Edição de categoria
+│   ├── base.html           # Base template with navigation
+│   ├── expenses.html       # Expense listing and creation
+│   ├── edit-expense.html   # Expense editing
+│   ├── houses.html         # House listing and creation
+│   ├── edit-house.html     # House editing
+│   ├── categories.html     # Category listing and creation
+│   └── edit-category.html  # Category editing
 └── static/
-    └── style.css           # Estilos com dark mode
+    └── style.css           # Styles with dark mode
 ```
 
-## 🗂️ Banco de Dados
+## 🗂️ Database
 
 **houses**: id, name, selling_price, observations
 
@@ -71,17 +71,13 @@ contruction_app/
 
 **expenses**: id, value, category, date, observations, house_id (FK → houses)
 
-## 📊 Categorias Padrão
-
-Aquisição e Regularização, Preparação do Terreno, Mão de Obra, Materiais de Construção, Projetos e Técnicos, Infraestrutura da Obra, Custos Administrativos
-
 ## 🌐 Deploy (PythonAnywhere)
 
-1. Clone o repo no PythonAnywhere: `git clone ...`
-2. Configure o Web App apontando o WSGI para `wsgi.py`
-3. Adicione static files: URL `/static/` → diretório `static/`
+1. Clone the repo on PythonAnywhere: `git clone ...`
+2. Set up the Web App pointing WSGI to `wsgi.py`
+3. Add static files: URL `/static/` → directory `static/`
 4. Reload
 
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
 Victor Santos
