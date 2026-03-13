@@ -63,14 +63,39 @@ def expenses():
 
         categories = cursor.execute("SELECT id, name FROM categories ORDER BY name").fetchall()
         houses = cursor.execute("SELECT id, name FROM houses").fetchall()
-        expenses = cursor.execute("""
+
+        # Build filtered query
+        query = """
             SELECT g.id, g.value, g.category, g.date, c.name, g.observations
             FROM expenses g
             JOIN houses c ON g.house_id = c.id
-            ORDER BY g.date DESC
-        """).fetchall()
+            WHERE 1=1
+        """
+        params = []
 
-        return render_template("expenses.html", houses=houses, categories=categories, expenses=expenses, today=str(date.today()))
+        filter_house = request.args.get("house_id", "")
+        filter_category = request.args.get("category_id", "")
+        filter_start = request.args.get("start_date", "")
+        filter_end = request.args.get("end_date", "")
+
+        if filter_house:
+            query += " AND g.house_id = ?"
+            params.append(filter_house)
+        if filter_category:
+            query += " AND g.category = (SELECT name FROM categories WHERE id = ?)"
+            params.append(filter_category)
+        if filter_start:
+            query += " AND g.date >= ?"
+            params.append(filter_start)
+        if filter_end:
+            query += " AND g.date <= ?"
+            params.append(filter_end)
+
+        query += " ORDER BY g.date DESC"
+        expenses = cursor.execute(query, params).fetchall()
+
+        return render_template("expenses.html", houses=houses, categories=categories, expenses=expenses, today=str(date.today()),
+                               filter_house=filter_house, filter_category=filter_category, filter_start=filter_start, filter_end=filter_end)
     finally:
         conn.close()
 

@@ -50,6 +50,46 @@
 
 <h2>Gastos Cadastrados</h2>
 
+<details>
+  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">🔍 Filtros</summary>
+  <form method="get">
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:0.75rem; align-items:end;">
+      <div>
+        <label>Casa</label>
+        <select name="house_id" style="margin-bottom:0">
+          <option value="">Todas</option>
+          {% for house in houses %}
+            <option value="{{ house[0] }}" {% if filter_house == house[0]|string %}selected{% endif %}>{{ house[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>Categoria</label>
+        <select name="category_id" style="margin-bottom:0">
+          <option value="">Todas</option>
+          {% for c in categories %}
+            <option value="{{ c[0] }}" {% if filter_category == c[0]|string %}selected{% endif %}>{{ c[1] }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>De</label>
+        <input type="date" name="start_date" value="{{ filter_start }}" style="margin-bottom:0">
+      </div>
+      <div>
+        <label>Até</label>
+        <input type="date" name="end_date" value="{{ filter_end }}" style="margin-bottom:0">
+      </div>
+      <div>
+        <button type="submit" style="width:100%; margin:0">🔍 Filtrar</button>
+      </div>
+      <div>
+        <a href="/expenses" class="btn" style="background-color:#6b7280; text-decoration:none; text-align:center; display:block; width:100%; margin:0">Limpar</a>
+      </div>
+    </div>
+  </form>
+</details>
+
 <table>
   <thead>
     <tr>
