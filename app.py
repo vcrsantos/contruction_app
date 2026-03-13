@@ -77,6 +77,11 @@ def edit_expense(expense_id):
     cursor = conn.cursor()
 
     if request.method == "POST":
+        category_id = request.form["category_id"]
+        category_name = cursor.execute(
+            "SELECT name FROM categories WHERE id = ?", (category_id,)
+        ).fetchone()[0]
+
         cursor.execute(
             """
             UPDATE expenses
@@ -85,7 +90,7 @@ def edit_expense(expense_id):
             """,
             (
                 request.form["value"],
-                request.form["category"],
+                category_name,
                 request.form["date"],
                 request.form["house_id"],
                 request.form.get("observations", ""),
