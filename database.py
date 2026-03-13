@@ -1,6 +1,7 @@
 import sqlite3
+import os
 
-DB_NAME = "construction.db"
+DB_NAME = os.path.join(os.path.dirname(os.path.abspath(__file__)), "construction.db")
 
 CATEGORIES_DEFAULT = [
     'Aquisição e Regularização',
