@@ -114,7 +114,7 @@ def edit_expense(expense_id):
     return render_template("edit-expense.html", expense=expense, houses=houses, categories=categories)
 
 
-@app.route("/remove-expense/<int:expense_id>")
+@app.route("/remove-expense/<int:expense_id>", methods=["POST"])
 def remove_expense(expense_id):
     conn = database.get_connection()
     cursor = conn.cursor()
@@ -192,10 +192,18 @@ def edit_house(house_id):
 
     return render_template("edit-house.html", house=house)
 
-@app.route("/remove-house/<int:house_id>")
+@app.route("/remove-house/<int:house_id>", methods=["POST"])
 def remove_house(house_id):
     conn = database.get_connection()
     cursor = conn.cursor()
+
+    using = cursor.execute(
+        "SELECT COUNT(*) FROM expenses WHERE house_id = ?", (house_id,)
+    ).fetchone()[0]
+
+    if using > 0:
+        conn.close()
+        return "Casa possui gastos vinculados. Não pode remover.", 400
 
     cursor.execute("DELETE FROM houses WHERE id = ?", (house_id,))
     conn.commit()
@@ -233,7 +241,7 @@ def new_category():
 
     return redirect("/categories")
 
-@app.route("/remove-category/<int:category_id>")
+@app.route("/remove-category/<int:category_id>", methods=["POST"])
 def remove_category(category_id):
     conn = database.get_connection()
     cursor = conn.cursor()

@@ -71,7 +71,9 @@
         <td>{{ g[5][:50] if g[5] else '-' }}</td>
         <td>
           <a href="/edit-expense/{{ g[0] }}">✏️</a>
-          <a href="/remove-expense/{{ g[0] }}">🗑️</a>
+          <form method="post" action="/remove-expense/{{ g[0] }}" style="display:inline" onsubmit="return confirm('Tem certeza?')">
+            <button type="submit" style="background:none;border:none;cursor:pointer;font-size:1.25rem;padding:0;margin:0 0.25rem">🗑️</button>
+          </form>
         </td>
       </tr>
     {% endfor %}

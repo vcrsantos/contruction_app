@@ -24,7 +24,9 @@
         <td><strong>{{ c[1] }}</strong></td>
         <td>
           <a href="/edit-category/{{ c[0] }}">✏️</a>
-          <a href="/remove-category/{{ c[0] }}">🗑️</a>
+          <form method="post" action="/remove-category/{{ c[0] }}" style="display:inline" onsubmit="return confirm('Tem certeza?')">
+            <button type="submit" style="background:none;border:none;cursor:pointer;font-size:1.25rem;padding:0;margin:0 0.25rem">🗑️</button>
+          </form>
         </td>
       </tr>
     {% endfor %}
