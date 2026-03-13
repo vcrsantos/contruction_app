@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from datetime import date
 import database
+import os
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
 
 database.init_db()
 database.seed_categories()
@@ -36,6 +38,7 @@ def expenses():
                 ),
             )
             conn.commit()
+            flash("Gasto salvo com sucesso!", "success")
             return redirect("/expenses")
 
         categories = cursor.execute("SELECT id, name FROM categories ORDER BY name").fetchall()
@@ -76,6 +79,7 @@ def edit_expense(expense_id):
                 ),
             )
             conn.commit()
+            flash("Gasto atualizado!", "success")
             return redirect("/expenses")
 
         expense = cursor.execute(
@@ -95,6 +99,7 @@ def remove_expense(expense_id):
     try:
         conn.execute("DELETE FROM expenses WHERE id = ?", (expense_id,))
         conn.commit()
+        flash("Gasto removido!", "success")
     finally:
         conn.close()
     return redirect("/expenses")
@@ -124,6 +129,7 @@ def new_house():
             (request.form["name"], request.form.get("selling_price"), request.form.get("observations")),
         )
         conn.commit()
+        flash("Casa salva com sucesso!", "success")
     finally:
         conn.close()
     return redirect("/houses")
@@ -139,6 +145,7 @@ def edit_house(house_id):
                 (request.form["name"], request.form.get("selling_price"), request.form.get("observations"), house_id),
             )
             conn.commit()
+            flash("Casa atualizada!", "success")
             return redirect("/houses")
 
         house = conn.execute("SELECT id, name, selling_price, observations FROM houses WHERE id = ?", (house_id,)).fetchone()
@@ -153,10 +160,12 @@ def remove_house(house_id):
     try:
         using = conn.execute("SELECT COUNT(*) FROM expenses WHERE house_id = ?", (house_id,)).fetchone()[0]
         if using > 0:
-            return "Casa possui gastos vinculados. Não pode remover.", 400
+            flash("Casa possui gastos vinculados. Não pode remover.", "error")
+            return redirect("/houses")
 
         conn.execute("DELETE FROM houses WHERE id = ?", (house_id,))
         conn.commit()
+        flash("Casa removida!", "success")
     finally:
         conn.close()
     return redirect("/houses")
@@ -178,6 +187,7 @@ def new_category():
     try:
         conn.execute("INSERT INTO categories (name) VALUES (?)", (request.form["name"],))
         conn.commit()
+        flash("Categoria salva com sucesso!", "success")
     finally:
         conn.close()
     return redirect("/categories")
@@ -193,10 +203,12 @@ def remove_category(category_id):
         ).fetchone()[0]
 
         if using > 0:
-            return "Categoria em uso. Não pode remover.", 400
+            flash("Categoria em uso. Não pode remover.", "error")
+            return redirect("/categories")
 
         conn.execute("DELETE FROM categories WHERE id = ?", (category_id,))
         conn.commit()
+        flash("Categoria removida!", "success")
     finally:
         conn.close()
     return redirect("/categories")
@@ -209,6 +221,7 @@ def edit_category(category_id):
         if request.method == "POST":
             conn.execute("UPDATE categories SET name = ? WHERE id = ?", (request.form["name"], category_id))
             conn.commit()
+            flash("Categoria atualizada!", "success")
             return redirect("/categories")
 
         category = conn.execute("SELECT id, name FROM categories WHERE id = ?", (category_id,)).fetchone()
