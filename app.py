@@ -6,6 +6,16 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", os.urandom(24))
 
+
+@app.template_filter('brl')
+def brl_filter(value):
+    try:
+        v = float(value)
+        formatted = f"{v:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        return f"R$ {formatted}"
+    except (ValueError, TypeError):
+        return "R$ 0,00"
+
 database.init_db()
 database.seed_categories()
 

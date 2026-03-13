@@ -32,8 +32,8 @@
     {% for house in houses %}
       <tr>
         <td><strong>{{ house[1] }}</strong></td>
-        <td>{{ 'R$ %.2f'|format(house[2]) if house[2] else '-' }}</td>
-        <td><strong>{{ 'R$ %.2f'|format(house[4]) }}</strong></td>
+        <td>{{ house[2]|brl if house[2] else '-' }}</td>
+        <td><strong>{{ house[4]|brl }}</strong></td>
         <td>{{ house[3][:50] if house[3] else '-' }}</td>
         <td>
           <a href="/edit-house/{{ house[0] }}">✏️</a>

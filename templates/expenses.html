@@ -64,7 +64,7 @@
   <tbody>
     {% for g in expenses %}
       <tr>
-        <td><strong>R$ {{ '%.2f'|format(g[1]) }}</strong></td>
+        <td><strong>{{ g[1]|brl }}</strong></td>
         <td>{{ g[2] }}</td>
         <td>{{ g[4] }}</td>
         <td>{{ g[3] }}</td>
