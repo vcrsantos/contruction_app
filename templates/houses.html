@@ -37,8 +37,8 @@
         <td>{{ house[3][:50] if house[3] else '-' }}</td>
         <td>
           <a href="/edit-house/{{ house[0] }}">✏️</a>
-          <form method="post" action="/remove-house/{{ house[0] }}" style="display:inline" onsubmit="return confirm('Tem certeza?')">
-            <button type="submit" style="background:none;border:none;cursor:pointer;font-size:1.25rem;padding:0;margin:0 0.25rem">🗑️</button>
+          <form method="post" action="/remove-house/{{ house[0] }}" class="inline" onsubmit="return confirm('Tem certeza?')">
+            <button type="submit" class="btn-delete">🗑️</button>
           </form>
         </td>
       </tr>

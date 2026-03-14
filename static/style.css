@@ -137,6 +137,15 @@ form {
   margin-bottom: 2rem;
 }
 
+form.inline {
+  background: none;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  margin: 0;
+  display: inline;
+}
+
 label {
   display: block;
   margin: 1rem 0 0.5rem 0;
@@ -172,7 +181,7 @@ textarea::placeholder {
 }
 
 /* Buttons */
-button,
+button:not(.btn-delete),
 .btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
@@ -188,13 +197,13 @@ button,
   text-align: center;
 }
 
-button:hover,
+button:not(.btn-delete):hover,
 .btn:hover {
   background-color: var(--primary-dark);
   transform: translateY(-2px);
 }
 
-button:active,
+button:not(.btn-delete):active,
 .btn:active {
   transform: translateY(0);
 }
@@ -205,6 +214,21 @@ button:active,
 
 .btn-danger:hover {
   background-color: #dc2626;
+}
+
+.btn-delete {
+  all: unset;
+  cursor: pointer;
+  font-size: 1.25rem;
+  margin: 0 0.25rem;
+}
+
+.btn-delete:hover {
+  all: unset;
+  cursor: pointer;
+  font-size: 1.25rem;
+  margin: 0 0.25rem;
+  opacity: 0.7;
 }
 
 .btn-success {
@@ -352,7 +376,7 @@ hr {
     margin-bottom: 1rem;
   }
 
-  button,
+  button:not(.btn-delete),
   .btn {
     width: 100%;
     padding: 0.875rem;
