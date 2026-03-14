@@ -2,7 +2,7 @@
 {% block content %}
 
 <details>
-  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">➕ Novo Investidor</summary>
+  <summary>➕ Novo Investidor</summary>
   <form method="post" action="/new-investor">
     <label>Nome</label>
     <input name="name" placeholder="Ex: Victor" required>
@@ -12,7 +12,7 @@
 
 {% if investors %}
 <details>
-  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">➕ Nova Transação</summary>
+  <summary>➕ Nova Transação</summary>
   <form method="post" action="/new-transaction">
     <label>Investidor</label>
     <select name="investor_id" required>
@@ -45,84 +45,57 @@
 {% if investor_summary %}
 <h2>Resumo dos Sócios</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Sócio</th>
-      <th>Aportado</th>
-      <th>Sacado</th>
-      <th>Líquido</th>
-      <th>Participação</th>
-      <th>Lucro</th>
-      <th>Saldo</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for s in investor_summary %}
-      <tr>
-        <td><strong>{{ s.name }}</strong></td>
-        <td>{{ s.invested|brl }}</td>
-        <td>{{ s.withdrawn|brl }}</td>
-        <td>{{ s.net_invested|brl }}</td>
-        <td><strong>{{ '%.1f'|format(s.pct) }}%</strong></td>
-        <td>{{ s.profit_share|brl }}</td>
-        <td><strong>{{ s.balance|brl }}</strong></td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="card-list">
+  {% for s in investor_summary %}
+    <div class="card">
+      <div class="card-header">
+        <strong>{{ s.name }}</strong>
+        <span class="card-value">{{ '%.1f'|format(s.pct) }}%</span>
+      </div>
+      <div class="card-body" style="flex-direction:column; gap:0.4rem;">
+        <span>Aportado: <strong>{{ s.invested|brl }}</strong></span>
+        {% if s.withdrawn > 0 %}<span>Sacado: <strong>{{ s.withdrawn|brl }}</strong></span>{% endif %}
+        <span>Investido líquido: <strong>{{ s.net_invested|brl }}</strong></span>
+        <span>Lucro: <strong>{{ s.profit_share|brl }}</strong></span>
+        <span>Saldo total: <strong style="color:var(--primary);">{{ s.balance|brl }}</strong></span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Total Investido</th>
-      <th>Total Gastos</th>
-      <th>Total Vendas</th>
-      <th>Lucro Total</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>{{ total_invested|brl }}</strong></td>
-      <td><strong>{{ total_expenses|brl }}</strong></td>
-      <td><strong>{{ total_sales|brl }}</strong></td>
-      <td><strong>{{ total_profit|brl }}</strong></td>
-    </tr>
-  </tbody>
-</table>
+<div class="card">
+  <div class="card-body" style="flex-direction:column; gap:0.4rem;">
+    <span>Total investido: <strong>{{ total_invested|brl }}</strong></span>
+    <span>Total gastos: <strong>{{ total_expenses|brl }}</strong></span>
+    <span>Total vendas: <strong>{{ total_sales|brl }}</strong></span>
+    <span>Lucro total: <strong style="color:var(--primary);">{{ total_profit|brl }}</strong></span>
+  </div>
+</div>
 {% endif %}
 
 {% if transactions %}
 <h2>Transações</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Data</th>
-      <th>Investidor</th>
-      <th>Tipo</th>
-      <th>Valor</th>
-      <th>Obs</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for t in transactions %}
-      <tr>
-        <td>{{ t[4] }}</td>
-        <td>{{ t[1] }}</td>
-        <td>{{ 'Aporte' if t[2] == 'deposit' else 'Saque' }}</td>
-        <td><strong>{{ t[3]|brl }}</strong></td>
-        <td>{{ t[5][:30] if t[5] else '-' }}</td>
-        <td>
+<div class="card-list">
+  {% for t in transactions %}
+    <div class="card">
+      <div class="card-header">
+        <span class="card-value">{{ t[3]|brl }}</span>
+        <div class="card-actions">
           <form method="post" action="/remove-transaction/{{ t[0] }}" class="inline" onsubmit="return confirm('Tem certeza?')">
             <button type="submit" class="btn-delete">🗑️</button>
           </form>
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="tag">{{ 'Aporte' if t[2] == 'deposit' else 'Saque' }}</span>
+        <span>{{ t[1] }}</span>
+        <span>{{ t[4] }}</span>
+        {% if t[5] %}<span>{{ t[5][:30] }}</span>{% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
 {% endif %}
 
 {% endblock %}

@@ -13,7 +13,7 @@
 </div>
 
 <details>
-  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">➕ Novo Gasto</summary>
+  <summary>➕ Novo Gasto</summary>
   <form method="post">
   <label>Valor</label>
   <input
@@ -45,7 +45,7 @@
   <textarea
     name="observations"
     placeholder="Detalhes adicionais sobre o gasto"
-    rows="4"
+    rows="2"
   ></textarea>
 
   <button type="submit">💾 Salvar Gasto</button>
@@ -55,7 +55,7 @@
 <h2>Gastos Cadastrados</h2>
 
 <details>
-  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">🔍 Filtros</summary>
+  <summary>🔍 Filtros</summary>
   <form method="get">
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:0.75rem; align-items:end;">
       <div>
@@ -85,32 +85,25 @@
   </form>
 </details>
 
-<table>
-  <thead>
-    <tr>
-      <th>Valor</th>
-      <th>Categoria</th>
-      <th>Data</th>
-      <th>Observações</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
+<div class="card-list">
     {% for g in expenses %}
-      <tr>
-        <td><strong>{{ g[1]|brl }}</strong></td>
-        <td>{{ g[2] }}</td>
-        <td>{{ g[3] }}</td>
-        <td>{{ g[5][:50] if g[5] else '-' }}</td>
-        <td>
-          <a href="/edit-expense/{{ g[0] }}">✏️</a>
-          <form method="post" action="/remove-expense/{{ g[0] }}" class="inline" onsubmit="return confirm('Tem certeza?')">
-            <button type="submit" class="btn-delete">🗑️</button>
-          </form>
-        </td>
-      </tr>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-value">{{ g[1]|brl }}</span>
+          <div class="card-actions">
+            <a href="/edit-expense/{{ g[0] }}">✏️</a>
+            <form method="post" action="/remove-expense/{{ g[0] }}" class="inline" onsubmit="return confirm('Tem certeza?')">
+              <button type="submit" class="btn-delete">🗑️</button>
+            </form>
+          </div>
+        </div>
+        <div class="card-body">
+          <span class="tag">{{ g[2] }}</span>
+          <span>{{ g[3] }}</span>
+          {% if g[5] %}<span>{{ g[5][:50] }}</span>{% endif %}
+        </div>
+      </div>
     {% endfor %}
-  </tbody>
-</table>
+  </div>
 
 {% endblock %}
