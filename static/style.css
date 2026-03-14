@@ -51,6 +51,7 @@
 
 html {
   font-size: 16px;
+  overflow-x: hidden;
 }
 
 body {
@@ -60,6 +61,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
   line-height: 1.6;
   padding-bottom: 100px;
+  overflow-x: hidden;
 }
 
 /* Navigation - Tab Bar Style */

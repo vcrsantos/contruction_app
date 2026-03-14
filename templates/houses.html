@@ -11,7 +11,7 @@
     <input type="number" step="0.01" name="selling_price" placeholder="R$ 0,00">
 
     <label>Observações</label>
-    <textarea name="observations" rows="3" placeholder="Observações adicionais..."></textarea>
+    <textarea name="observations" rows="2" placeholder="Observações adicionais..."></textarea>
 
     <button type="submit">💾 Salvar Casa</button>
   </form>
@@ -19,32 +19,25 @@
 
 <h2>Casas Cadastradas</h2>
 
-<table>
-  <thead>
-    <tr>
-      <th>Nome</th>
-      <th>Preço de Venda</th>
-      <th>Total Gasto</th>
-      <th>Observações</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for house in houses %}
-      <tr>
-        <td><strong>{{ house[1] }}</strong></td>
-        <td>{{ house[2]|brl if house[2] else '-' }}</td>
-        <td><strong>{{ house[4]|brl }}</strong></td>
-        <td>{{ house[3][:50] if house[3] else '-' }}</td>
-        <td>
+<div class="card-list">
+  {% for house in houses %}
+    <div class="card">
+      <div class="card-header">
+        <strong>{{ house[1] }}</strong>
+        <div class="card-actions">
           <a href="/edit-house/{{ house[0] }}">✏️</a>
           <form method="post" action="/remove-house/{{ house[0] }}" class="inline" onsubmit="return confirm('Tem certeza?')">
             <button type="submit" class="btn-delete">🗑️</button>
           </form>
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+        </div>
+      </div>
+      <div class="card-body" style="flex-direction:column; gap:0.4rem;">
+        <span>Preço de venda: <strong>{{ house[2]|brl if house[2] else '-' }}</strong></span>
+        <span>Total gasto: <strong>{{ house[4]|brl }}</strong></span>
+        {% if house[3] %}<span>{{ house[3][:80] }}</span>{% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
 
 {% endblock %}
