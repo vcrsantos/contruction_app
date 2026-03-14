@@ -56,8 +56,8 @@
         <span>Aportado: <strong>{{ s.invested|brl }}</strong></span>
         {% if s.withdrawn > 0 %}<span>Sacado: <strong>{{ s.withdrawn|brl }}</strong></span>{% endif %}
         <span>Investido líquido: <strong>{{ s.net_invested|brl }}</strong></span>
-        <span>Lucro: <strong>{{ s.profit_share|brl }}</strong></span>
-        <span>Saldo total: <strong style="color:var(--primary);">{{ s.balance|brl }}</strong></span>
+        <span>Lucro: <strong>{{ s.profit_share|brl_color|safe }}</strong></span>
+        <span>Saldo total: <strong>{{ s.balance|brl_color|safe }}</strong></span>
       </div>
     </div>
   {% endfor %}
@@ -68,7 +68,7 @@
     <span>Total investido: <strong>{{ total_invested|brl }}</strong></span>
     <span>Total gastos: <strong>{{ total_expenses|brl }}</strong></span>
     <span>Total vendas: <strong>{{ total_sales|brl }}</strong></span>
-    <span>Lucro total: <strong style="color:var(--primary);">{{ total_profit|brl }}</strong></span>
+    <span>Lucro total: <strong>{{ total_profit|brl_color|safe }}</strong></span>
   </div>
 </div>
 {% endif %}

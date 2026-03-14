@@ -16,6 +16,20 @@ def brl_filter(value):
     except (ValueError, TypeError):
         return "R$ 0,00"
 
+
+@app.template_filter('brl_color')
+def brl_color_filter(value):
+    try:
+        v = float(value)
+        formatted = f"{abs(v):,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+        if v > 0:
+            return f'<span style="color:var(--success)">R$ {formatted}</span>'
+        elif v < 0:
+            return f'<span style="color:var(--danger)">-R$ {formatted}</span>'
+        return f'<span>R$ {formatted}</span>'
+    except (ValueError, TypeError):
+        return '<span>R$ 0,00</span>'
+
 database.init_db()
 database.seed_categories()
 
