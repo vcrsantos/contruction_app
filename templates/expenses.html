@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Novo Gasto</h2>
-
-<form method="post">
+<details>
+  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">➕ Novo Gasto</summary>
+  <form method="post">
   <label>Valor</label>
   <input
     type="number"
@@ -39,6 +39,7 @@
 
   <button type="submit">💾 Salvar Gasto</button>
 </form>
+</details>
 
 <h2>Gastos Cadastrados</h2>
 

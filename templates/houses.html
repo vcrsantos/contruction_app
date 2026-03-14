@@ -1,20 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Nova Casa</h2>
+<details>
+  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">➕ Nova Casa</summary>
+  <form method="post" action="/new-house">
+    <label>Nome da Casa</label>
+    <input name="name" placeholder="Ex: Casa Principal" required autofocus>
 
-<form method="post" action="/new-house">
-  <label>Nome da Casa</label>
-  <input name="name" placeholder="Ex: Casa Principal" required autofocus>
+    <label>Preço de Venda</label>
+    <input type="number" step="0.01" name="selling_price" placeholder="R$ 0,00">
 
-  <label>Preço de Venda</label>
-  <input type="number" step="0.01" name="selling_price" placeholder="R$ 0,00">
+    <label>Observações</label>
+    <textarea name="observations" rows="3" placeholder="Observações adicionais..."></textarea>
 
-  <label>Observações</label>
-  <textarea name="observations" rows="3" placeholder="Observações adicionais..."></textarea>
-
-  <button type="submit">💾 Salvar Casa</button>
-</form>
+    <button type="submit">💾 Salvar Casa</button>
+  </form>
+</details>
 
 <h2>Casas Cadastradas</h2>
 

@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h2>Nova Categoria</h2>
-
-<form method="post" action="/new-category">
-    <label>Nome da Categoria</label>
-    <input name="name" type="text" placeholder="Ex: Material de Construção" required autofocus>
-    <button type="submit">💾 Salvar Categoria</button>
-</form>
+<details>
+  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">➕ Nova Categoria</summary>
+  <form method="post" action="/new-category">
+      <label>Nome da Categoria</label>
+      <input name="name" type="text" placeholder="Ex: Material de Construção" required autofocus>
+      <button type="submit">💾 Salvar Categoria</button>
+  </form>
+</details>
 
 <h2>Categorias Cadastradas</h2>
 
