@@ -75,6 +75,25 @@ def init_db():
             FOREIGN KEY (house_id) REFERENCES houses(id)
         )
     ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS investors (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            investor_id INTEGER NOT NULL,
+            type TEXT NOT NULL,
+            value REAL NOT NULL,
+            date TEXT NOT NULL,
+            observations TEXT,
+            FOREIGN KEY (investor_id) REFERENCES investors(id)
+        )
+    ''')
     
     conn.commit()
     conn.close()

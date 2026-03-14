@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block content %}
+
+<details>
+  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">➕ Novo Investidor</summary>
+  <form method="post" action="/new-investor">
+    <label>Nome</label>
+    <input name="name" placeholder="Ex: Victor" required>
+    <button type="submit">💾 Salvar</button>
+  </form>
+</details>
+
+{% if investors %}
+<details>
+  <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">➕ Nova Transação</summary>
+  <form method="post" action="/new-transaction">
+    <label>Investidor</label>
+    <select name="investor_id" required>
+      <option value="">-- Selecione --</option>
+      {% for inv in investors %}
+        <option value="{{ inv[0] }}">{{ inv[1] }}</option>
+      {% endfor %}
+    </select>
+
+    <label>Tipo</label>
+    <select name="type" required>
+      <option value="deposit">Aporte</option>
+      <option value="withdrawal">Saque</option>
+    </select>
+
+    <label>Valor</label>
+    <input type="number" step="0.01" name="value" placeholder="Ex: 10000.00" required>
+
+    <label>Data</label>
+    <input type="date" name="date">
+
+    <label>Observações</label>
+    <input name="observations" placeholder="Opcional">
+
+    <button type="submit">💾 Registrar</button>
+  </form>
+</details>
+{% endif %}
+
+{% if investor_summary %}
+<h2>Resumo dos Sócios</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sócio</th>
+      <th>Aportado</th>
+      <th>Sacado</th>
+      <th>Líquido</th>
+      <th>Participação</th>
+      <th>Lucro</th>
+      <th>Saldo</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in investor_summary %}
+      <tr>
+        <td><strong>{{ s.name }}</strong></td>
+        <td>{{ s.invested|brl }}</td>
+        <td>{{ s.withdrawn|brl }}</td>
+        <td>{{ s.net_invested|brl }}</td>
+        <td><strong>{{ '%.1f'|format(s.pct) }}%</strong></td>
+        <td>{{ s.profit_share|brl }}</td>
+        <td><strong>{{ s.balance|brl }}</strong></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th>Total Investido</th>
+      <th>Total Gastos</th>
+      <th>Total Vendas</th>
+      <th>Lucro Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>{{ total_invested|brl }}</strong></td>
+      <td><strong>{{ total_expenses|brl }}</strong></td>
+      <td><strong>{{ total_sales|brl }}</strong></td>
+      <td><strong>{{ total_profit|brl }}</strong></td>
+    </tr>
+  </tbody>
+</table>
+{% endif %}
+
+{% if transactions %}
+<h2>Transações</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Investidor</th>
+      <th>Tipo</th>
+      <th>Valor</th>
+      <th>Obs</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in transactions %}
+      <tr>
+        <td>{{ t[4] }}</td>
+        <td>{{ t[1] }}</td>
+        <td>{{ 'Aporte' if t[2] == 'deposit' else 'Saque' }}</td>
+        <td><strong>{{ t[3]|brl }}</strong></td>
+        <td>{{ t[5][:30] if t[5] else '-' }}</td>
+        <td>
+          <form method="post" action="/remove-transaction/{{ t[0] }}" class="inline" onsubmit="return confirm('Tem certeza?')">
+            <button type="submit" class="btn-delete">🗑️</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}
+
+{% endblock %}

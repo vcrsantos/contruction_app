@@ -334,5 +334,138 @@ def edit_category(category_id):
         conn.close()
 
 
+@app.route("/investors")
+def investors():
+    conn = database.get_connection()
+    try:
+        investors = conn.execute("SELECT id, name FROM investors ORDER BY name").fetchall()
+
+        # Get all transactions
+        txns = conn.execute("""
+            SELECT t.id, i.name, t.type, t.value, t.date, t.observations, t.investor_id
+            FROM transactions t
+            JOIN investors i ON t.investor_id = i.id
+            ORDER BY t.date
+        """).fetchall()
+
+        # Get all houses with expenses and selling price
+        houses = conn.execute("""
+            SELECT h.id, h.name, h.selling_price, IFNULL(SUM(e.value), 0)
+            FROM houses h
+            LEFT JOIN expenses e ON h.id = e.house_id
+            GROUP BY h.id
+            ORDER BY h.id
+        """).fetchall()
+
+        # Calculate shares per period
+        # Build timeline: initial state then each transaction changes proportions
+        investor_equity = {}  # investor_id -> current equity
+        for inv in investors:
+            investor_equity[inv[0]] = 0.0
+
+        # Process transactions in date order to build equity
+        sorted_txns = sorted(txns, key=lambda t: t[4])
+        for t in sorted_txns:
+            inv_id = t[6]
+            if t[2] == 'deposit':
+                investor_equity[inv_id] += t[3]
+            else:
+                investor_equity[inv_id] -= t[3]
+
+        total_invested = sum(investor_equity.values())
+
+        # Calculate proportions
+        proportions = {}
+        for inv_id, equity in investor_equity.items():
+            proportions[inv_id] = equity / total_invested if total_invested > 0 else 0
+
+        # Calculate totals
+        total_expenses = sum(h[3] for h in houses)
+        total_sales = sum(h[2] or 0 for h in houses)
+        total_profit = total_sales - total_expenses
+
+        # Per investor summary
+        investor_summary = []
+        for inv in investors:
+            inv_id = inv[0]
+            pct = proportions.get(inv_id, 0)
+            invested = sum(t[3] for t in sorted_txns if t[6] == inv_id and t[2] == 'deposit')
+            withdrawn = sum(t[3] for t in sorted_txns if t[6] == inv_id and t[2] == 'withdrawal')
+            profit_share = total_profit * pct
+            investor_summary.append({
+                'name': inv[1],
+                'id': inv_id,
+                'invested': invested,
+                'withdrawn': withdrawn,
+                'net_invested': invested - withdrawn,
+                'pct': pct * 100,
+                'profit_share': profit_share,
+                'balance': (invested - withdrawn) + profit_share,
+            })
+
+        return render_template("investors.html",
+                               investors=investors,
+                               transactions=txns,
+                               investor_summary=investor_summary,
+                               total_invested=total_invested,
+                               total_expenses=total_expenses,
+                               total_sales=total_sales,
+                               total_profit=total_profit)
+    finally:
+        conn.close()
+
+
+@app.route("/new-investor", methods=["POST"])
+def new_investor():
+    name = request.form.get("name", "").strip()
+    if not name:
+        flash("Nome do investidor é obrigatório.", "error")
+        return redirect("/investors")
+    conn = database.get_connection()
+    try:
+        conn.execute("INSERT INTO investors (name) VALUES (?)", (name,))
+        conn.commit()
+        flash("Investidor adicionado!", "success")
+    finally:
+        conn.close()
+    return redirect("/investors")
+
+
+@app.route("/new-transaction", methods=["POST"])
+def new_transaction():
+    investor_id = request.form.get("investor_id", "").strip()
+    txn_type = request.form.get("type", "").strip()
+    value = request.form.get("value", "").strip()
+    txn_date = request.form.get("date", "").strip() or str(date.today())
+
+    if not investor_id or not value or float(value) <= 0:
+        flash("Investidor e valor são obrigatórios.", "error")
+        return redirect("/investors")
+
+    conn = database.get_connection()
+    try:
+        conn.execute(
+            "INSERT INTO transactions (investor_id, type, value, date, observations) VALUES (?, ?, ?, ?, ?)",
+            (investor_id, txn_type, value, txn_date, request.form.get("observations", "")),
+        )
+        conn.commit()
+        flash("Transação registrada!", "success")
+    finally:
+        conn.close()
+    return redirect("/investors")
+
+
+@app.route("/remove-transaction/<int:txn_id>", methods=["POST"])
+def remove_transaction(txn_id):
+    conn = database.get_connection()
+    try:
+        conn.execute("DELETE FROM transactions WHERE id = ?", (txn_id,))
+        conn.commit()
+        flash("Transação removida!", "success")
+    finally:
+        conn.close()
+    return redirect("/investors")
+
+
 if __name__ == "__main__":
     app.run()
