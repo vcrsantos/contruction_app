@@ -30,14 +30,6 @@
     required
   >
 
-  <label>Casa</label>
-  <select name="house_id" required>
-    <option value="">-- Selecione a casa --</option>
-    {% for house in houses %}
-      <option value="{{ house[0] }}">{{ house[1] }}</option>
-    {% endfor %}
-  </select>
-
   <label>Observações</label>
   <textarea
     name="observations"
@@ -54,15 +46,6 @@
   <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">🔍 Filtros</summary>
   <form method="get">
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:0.75rem; align-items:end;">
-      <div>
-        <label>Casa</label>
-        <select name="house_id" style="margin-bottom:0">
-          <option value="">Todas</option>
-          {% for house in houses %}
-            <option value="{{ house[0] }}" {% if filter_house == house[0]|string %}selected{% endif %}>{{ house[1] }}</option>
-          {% endfor %}
-        </select>
-      </div>
       <div>
         <label>Categoria</label>
         <select name="category_id" style="margin-bottom:0">
@@ -95,7 +78,6 @@
     <tr>
       <th>Valor</th>
       <th>Categoria</th>
-      <th>Casa</th>
       <th>Data</th>
       <th>Observações</th>
       <th>Ações</th>
@@ -106,7 +88,6 @@
       <tr>
         <td><strong>{{ g[1]|brl }}</strong></td>
         <td>{{ g[2] }}</td>
-        <td>{{ g[4] }}</td>
         <td>{{ g[3] }}</td>
         <td>{{ g[5][:50] if g[5] else '-' }}</td>
         <td>

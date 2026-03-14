@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from datetime import date
 import database
 import os
@@ -20,6 +20,39 @@ database.init_db()
 database.seed_categories()
 
 
+@app.before_request
+def load_active_house():
+    conn = database.get_connection()
+    try:
+        houses = conn.execute("SELECT id, name FROM houses").fetchall()
+        if houses and "active_house_id" not in session:
+            session["active_house_id"] = houses[0][0]
+    finally:
+        conn.close()
+
+
+@app.context_processor
+def inject_nav_data():
+    conn = database.get_connection()
+    try:
+        houses = conn.execute("SELECT id, name FROM houses").fetchall()
+        active_house_id = session.get("active_house_id")
+        active_house_name = None
+        for h in houses:
+            if h[0] == active_house_id:
+                active_house_name = h[1]
+                break
+        return dict(nav_houses=houses, active_house_id=active_house_id, active_house_name=active_house_name)
+    finally:
+        conn.close()
+
+
+@app.route("/set-active-house", methods=["POST"])
+def set_active_house():
+    session["active_house_id"] = int(request.form["house_id"])
+    return redirect(request.referrer or "/expenses")
+
+
 @app.route("/")
 def home():
     return redirect("/expenses")
@@ -34,7 +67,7 @@ def expenses():
         if request.method == "POST":
             value = request.form.get("value", "").strip()
             category_id = request.form.get("category_id", "").strip()
-            house_id = request.form.get("house_id", "").strip()
+            house_id = session.get("active_house_id")
 
             if not value or float(value) <= 0:
                 flash("Valor deve ser maior que zero.", "error")
@@ -53,7 +86,7 @@ def expenses():
                     request.form["value"],
                     category_name,
                     request.form["date"] or str(date.today()),
-                    request.form["house_id"],
+                    house_id,
                     request.form.get("observations", ""),
                 ),
             )
@@ -62,25 +95,21 @@ def expenses():
             return redirect("/expenses")
 
         categories = cursor.execute("SELECT id, name FROM categories ORDER BY name").fetchall()
-        houses = cursor.execute("SELECT id, name FROM houses").fetchall()
 
-        # Build filtered query
+        # Filter by active house
+        active_house_id = session.get("active_house_id")
         query = """
             SELECT g.id, g.value, g.category, g.date, c.name, g.observations
             FROM expenses g
             JOIN houses c ON g.house_id = c.id
-            WHERE 1=1
+            WHERE g.house_id = ?
         """
-        params = []
+        params = [active_house_id]
 
-        filter_house = request.args.get("house_id", "")
         filter_category = request.args.get("category_id", "")
         filter_start = request.args.get("start_date", "")
         filter_end = request.args.get("end_date", "")
 
-        if filter_house:
-            query += " AND g.house_id = ?"
-            params.append(filter_house)
         if filter_category:
             query += " AND g.category = (SELECT name FROM categories WHERE id = ?)"
             params.append(filter_category)
@@ -94,8 +123,8 @@ def expenses():
         query += " ORDER BY g.date DESC"
         expenses = cursor.execute(query, params).fetchall()
 
-        return render_template("expenses.html", houses=houses, categories=categories, expenses=expenses, today=str(date.today()),
-                               filter_house=filter_house, filter_category=filter_category, filter_start=filter_start, filter_end=filter_end)
+        return render_template("expenses.html", categories=categories, expenses=expenses, today=str(date.today()),
+                               filter_category=filter_category, filter_start=filter_start, filter_end=filter_end)
     finally:
         conn.close()
 
