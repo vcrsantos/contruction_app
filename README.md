@@ -1,18 +1,21 @@
 # Construction Expense Manager
 
-Web application built with Flask to track and manage construction project expenses.
+Web application built with Flask to track and manage construction project expenses with investor profit sharing.
 
 ## 🚀 Features
 
 - Manage multiple houses/properties (name, selling price, notes)
+- Active house selector for scoped expense management
 - Full CRUD for expenses with categories and notes
+- Investor management with proportional profit sharing (period-based)
 - Customizable categories with default seed data
-- Expense filters by house, category and date range
-- Brazilian currency formatting (R$)
+- Expense filters by category and date range
+- Brazilian currency formatting (R$) with color-coded profit/loss
 - Flash feedback messages with fade-out animation
 - Backend data validation
 - Deletion confirmation dialogs
-- Responsive UI with automatic dark mode
+- Mobile-first responsive UI with card layouts and tab bar navigation
+- Automatic dark mode
 - SQLite persistence
 
 ## 🛠️ Tech Stack
@@ -52,15 +55,16 @@ contruction_app/
 ├── wsgi.py             # WSGI entry point for deployment (PythonAnywhere)
 ├── requirements.txt    # Dependencies
 ├── templates/
-│   ├── base.html           # Base template with navigation
-│   ├── expenses.html       # Expense listing and creation
+│   ├── base.html           # Base template with tab bar navigation
+│   ├── expenses.html       # Expense listing with active house filter
 │   ├── edit-expense.html   # Expense editing
 │   ├── houses.html         # House listing and creation
 │   ├── edit-house.html     # House editing
 │   ├── categories.html     # Category listing and creation
-│   └── edit-category.html  # Category editing
+│   ├── edit-category.html  # Category editing
+│   └── investors.html      # Investor management and profit sharing
 └── static/
-    └── style.css           # Styles with dark mode
+    └── style.css           # Mobile-first styles with dark mode
 ```
 
 ## 🗂️ Database
@@ -70,6 +74,10 @@ contruction_app/
 **categories**: id, name (unique)
 
 **expenses**: id, value, category, date, observations, house_id (FK → houses)
+
+**investors**: id, name (unique)
+
+**transactions**: id, investor_id (FK → investors), type, value, date, observations
 
 ## 🌐 Deploy (PythonAnywhere)
 
