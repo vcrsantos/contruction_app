@@ -16,17 +16,6 @@
   <a href="/investors">👥 Sócios</a>
 </nav>
 
-<div class="house-selector">
-  <form method="post" action="/set-active-house" class="inline">
-    <span>🏗️ Casa ativa:</span>
-    <select name="house_id" onchange="this.form.submit()">
-      {% for h in nav_houses %}
-        <option value="{{ h[0] }}" {% if h[0] == active_house_id %}selected{% endif %}>{{ h[1] }}</option>
-      {% endfor %}
-    </select>
-  </form>
-</div>
-
 <div class="container">
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% for category, message in messages %}

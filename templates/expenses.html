@@ -1,6 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 
+<div class="house-selector">
+  <form method="post" action="/set-active-house" class="inline">
+    <span>🏗️ Casa ativa:</span>
+    <select name="house_id" onchange="this.form.submit()">
+      {% for h in nav_houses %}
+        <option value="{{ h[0] }}" {% if h[0] == active_house_id %}selected{% endif %}>{{ h[1] }}</option>
+      {% endfor %}
+    </select>
+  </form>
+</div>
+
 <details>
   <summary style="cursor:pointer; font-weight:600; font-size:1.1rem; margin-bottom:0.75rem;">➕ Novo Gasto</summary>
   <form method="post">
