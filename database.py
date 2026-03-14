@@ -4,13 +4,23 @@ import os
 DB_NAME = os.path.join(os.path.dirname(os.path.abspath(__file__)), "construction.db")
 
 CATEGORIES_DEFAULT = [
-    'Aquisição e Regularização',
-    'Preparação do Terreno',
-    'Mão de Obra',
-    'Materiais de Construção',
-    'Projetos e Técnicos',
-    'Infraestrutura da Obra',
-    'Custos Administrativos',
+    'Terreno',
+    'Cartório',
+    'Desmembramento',
+    'Limpeza terreno',
+    'Engenheiro',
+    'Container',
+    'Poste',
+    'Material',
+    'Pedreiro',
+    'Escritório',
+    'IPTU',
+    'Alvara',
+    'Consumo Água',
+    'Consumo Luz',
+    'Eletricista',
+    'Imposto',
+    'Seguro',
 ]
 
 def seed_categories():
